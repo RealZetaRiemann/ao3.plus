@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/main.css') }}">
+        <title>ao3.plus &#8212; An extension of your archiveofourown.org profile</title>
+    </head>
+    <body>
+        <div id="page-wrapper"> 
+            <img src="\static\images\ao3_logo.png" alt="" class="logo" width="70">
+		    <h1 style="float: clear;">ao3.plus</h1>
+		    <h2>ao3.plus is an extension of your archiveofourown.org profile, showing you stats and graphs about your fanfiction experience.</h2>
+            <nav id="nav">
+                <ul>
+                    <li class="nav"><span><a href="/dash"> Dashboard </a></span></li>
+                    <li class="nav"><span><a href="/bookmarks"> Bookmarks </a></span></li>
+                    <li class="nav"><span><a href="/works"> Works </a></span></li>
+                    <li class="nav"><span><a href="/achievements"> Achievements </a></span></li>
+                    <li class="nav"><span><a href="/contact"> Contact </a></span></li>
+                </ul>
+            </nav>
+            
+            <div class="achievement-right">
+
+                <p style="text-align: center;"><a class="ach-link" href="/everyachievement" target="_blank">List of All Potential Achievements</a></p>
+
+                {% if total == 0 %}
+                <p>Uh oh! It looks like this user hasn't earned any achievements yet. Time to get to work ;)</p>
+                {% endif %}
+
+                {% if bookmarks == "Newbie" %}
+                    <div class="ach-text">
+                        <h3>Newbie</h3>
+                        <p>>= 10 works bookmarked</p>
+                    </div>
+                    <img src="\static\images\achievements\newbie.png" alt="" class="ach-img" width="200">
+                {% endif %}
+                {% if bookmarks == "Casual" %}
+                    <div class="ach-text">
+                        <h3>Casual</h3>
+                        <p>>= 100 works bookmarked</p>
+                    </div>
+                    <img src="\static\images\achievements\casual.png" alt="" class="ach-img" width="200">
+                {% endif %}
+                {% if bookmarks == "Curator" %}
+                    <div class="ach-text">
+                        <h3>Curator</h3>
+                        <p>>= 250 works bookmarked</p>
+                    </div>
+                    <img src="\static\images\achievements\curator.png" alt="" class="ach-img" width="200">
+                {% endif %}
+                {% if bookmarks == "Bookworm" %}
+                    <div class="ach-text">
+                        <h3>Bookworm</h3>
+                        <p>>= 500 works bookmarked</p>
+                    </div>
+                    <img src="\static\images\achievements\bookworm.png" alt="" class="ach-img" width="200">
+                {% endif %}
+                {% if bookmarks == "Collector" %}
+                    <div class="ach-text">
+                        <h3>Collector</h3>
+                        <p>>= 1000 works bookmarked</p>
+                    </div>
+                    <img src="\static\images\achievements\collector.png" alt="" class="ach-img" width="200">
+                {% endif %}
+                {% if bookmarks == "Rereader Extraordinaire" %}
+                    <div class="ach-text">
+                        <h3>Rereader Extraordinaire</h3>
+                        <p>>= 5000 works bookmarked</p>
+                    </div>
+                    <img src="\static\images\achievements\rereader.png" alt="" class="ach-img" width="200">
+                {% endif %}
+                {% if bookmarks == "Expert" %}
+                    <div class="ach-text">
+                        <h3>Expert</h3>
+                        <p>Do you just bookmark every fic you read?</p>
+                        <p>>= 10000 works bookmarked</p>
+                    </div>
+                    <img src="\static\images\achievements\expert.png" alt="" class="ach-img" width="200">
+                {% endif %}
+
+                <br style="clear: both;">
+
+                {% if works == "Not Just a Reader" %}
+                    <div class="ach-text">
+                        <h3>Not Just a Reader</h3>
+                        <p>>= 1 works written</p>
+                    </div>
+                    <img src="\static\images\achievements\not-reader.png" alt="" class="ach-img" width="200">
+                {% endif %}
+                {% if works == "Practice Makes Perfect" %}
+                    <div class="ach-text">
+                        <h3>Practice Makes Perfect</h3>
+                        <p>>= 5 works written</p>
+                    </div>
+                    <img src="\static\images\achievements\practice.png" alt="" class="ach-img" width="200">
+                {% endif %}
+                {% if works == "Hobbyist" %}
+                    <div class="ach-text">
+                        <h3>Hobbyist</h3>
+                        <p>>= 20 works written</p>
+                    </div>
+                    <img src="\static\images\achievements\hobbyist.png" alt="" class="ach-img" width="200">
+                {% endif %}
+                {% if works == "No Beta, We Die Like Men" %}
+                    <div class="ach-text">
+                        <h3>No Beta, We Die Like Men</h3>
+                        <p>>= 50 works written</p>
+                    </div>
+                    <img src="\static\images\achievements\no-beta.png" alt="" class="ach-img" width="200">
+                {% endif %}
+                {% if works == "Author" %}
+                    <div class="ach-text">
+                        <h3>Author</h3>
+                        <p>>= 100 works written</p>
+                    </div>
+                    <img src="\static\images\achievements\author.png" alt="" class="ach-img" width="200">
+                {% endif %}
+                {% if works == "Ao3 Celebrity" %}
+                    <div class="ach-text">
+                        <h3>Ao3 Celebrity</h3>
+                        <p>>= 250 works written</p>
+                    </div>
+                    <img src="\static\images\achievements\celebrity.png" alt="" class="ach-img" width="200">
+                {% endif %}
+                {% if works == "Basically a Second Job" %}
+                    <div class="ach-text">
+                        <h3>Basically a Second Job</h3>
+                        <p>>= 500 works written</p>
+                    </div>
+                    <img src="\static\images\achievements\second-job.png" alt="" class="ach-img" width="200">
+                {% endif %}
+                {% if works == "Legendary" %}
+                    <div class="ach-text">
+                        <h3>Legendary</h3>
+                        <p>>= 1000 works written</p>
+                    </div>
+                    <img src="\static\images\achievements\legendary.png" alt="" class="ach-img" width="200">
+                {% endif %}
+
+                <br style="clear: both;">
+
+                {% if completionist == True %}
+                    <div class="ach-text">
+                        <h3>Completionist</h3>
+                        <p>All works and series written are 100% completed</p>
+                    </div>
+                    <img src="\static\images\achievements\100-percent.png" alt="" class="ach-img" width="200">
+                {% endif %}
+
+                <br style="clear: both;">
+                
+                {% if ratings == "Puritan" %}
+                    <div class="ach-text">
+                        <h3>Puritan</h3>
+                        <p>no explicit or mature works bookmarked/written</p>
+                    </div>
+                    <img src="\static\images\achievements\puritan.png" alt="" class="ach-img" width="200">
+                {% endif %}
+                {% if ratings == "Curious" %}
+                    <div class="ach-text">
+                        <h3>Curious</h3>
+                        <p>0-33% explicit/mature works bookmarked/written</p>
+                    </div>
+                    <img src="\static\images\achievements\curious.png" alt="" class="ach-img" width="200">
+                {% endif %}
+                {% if ratings == "Well Rounded" %}
+                    <div class="ach-text">
+                        <h3>Well Rounded</h3>
+                        <p>33-66% explicit/mature works bookmarked/written</p>
+                    </div>
+                    <img src="\static\images\achievements\well-rounded.png" alt="" class="ach-img" width="200">
+                {% endif %}
+                {% if ratings == "Here for 'The Plot'" %}
+                    <div class="ach-text">
+                        <h3>Here for 'The Plot'</h3>
+                        <p>66-99% explicit/mature works bookmarked/written</p>
+                    </div>
+                    <img src="\static\images\achievements\lemon.png" alt="" class="ach-img" width="200">
+                {% endif %}
+                {% if ratings == "Pervert" %}
+                    <div class="ach-text">
+                        <h3>Pervert</h3>
+                        <p>only explicit or mature works bookmarked/written</p>
+                    </div>
+                    <img src="\static\images\achievements\pervert.png" alt="" class="ach-img" width="200">
+                {% endif %}
+
+                <br style="clear: both;">
+
+            </div>
+        </div>
+    </body>
+</html>

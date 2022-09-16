@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/main.css') }}">
+        <title>ao3.plus &#8212; An extension of your archiveofourown.org profile</title>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+        google.charts.load("current", {packages:["corechart"]});
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var categorydata = google.visualization.arrayToDataTable([
+                {% for key, value in categorydata.items() %}
+                    {% if value is string %}
+                        ['{{ key }}', '{{ value }}'],
+                    {% else %}
+                        ['{{ key }}', {{ value }}],
+                    {% endif %}
+                {% endfor %}
+            ]);
+
+            var options = {
+            slices: {
+            0: { color: '#9E028D' },
+            1: { color: '#500253' },
+            2: { color: '#9D0208' },
+            3: { color: '#9E023C' },
+            4: { color: '#CE0272' },
+            5: { color: '#FD6A6F' }
+            }};
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart_categories'));
+            chart.draw(categorydata, options);
+        }
+        </script>
+        <script type="text/javascript">
+            google.charts.load("current", {packages:["corechart"]});
+            google.charts.setOnLoadCallback(drawChart);
+            function drawChart() {
+                var ratingdata = google.visualization.arrayToDataTable([
+                    {% for key, value in ratingdata.items() %}
+                        {% if value is string %}
+                            ['{{ key }}', '{{ value }}'],
+                        {% else %}
+                            ['{{ key }}', {{ value }}],
+                        {% endif %}
+                    {% endfor %}
+                ]);
+    
+                var options = {
+                slices: {
+                0: { color: '#9E028D' },
+                1: { color: '#500253' },
+                2: { color: '#9D0208' },
+                3: { color: '#9E023C' },
+                4: { color: '#CE0272' }
+                }};
+    
+                var chart = new google.visualization.PieChart(document.getElementById('piechart_ratings'));
+                chart.draw(ratingdata, options);
+            }
+            </script>
+    </head>
+    <body>
+        <div id="page-wrapper"> 
+            <img src="\static\images\ao3_logo.png" alt="" class="logo" width="70">
+		    <h1 style="float: clear;">ao3.plus</h1>
+		    <h2>ao3.plus is an extension of your archiveofourown.org profile, showing you stats and graphs about your fanfiction experience.</h2>
+            <nav id="nav">
+                <ul>
+                    <li class="nav"><span><a href="/dash"> Dashboard </a></span></li>
+                    <li class="nav"><span><a href="/bookmarks"> Bookmarks </a></span></li>
+                    <li class="nav"><span><a href="/works"> Works </a></span></li>
+                    <li class="nav"><span><a href="/achievements"> Achievements </a></span></li>
+                    <li class="nav"><span><a href="/contact"> Contact </a></span></li>
+                </ul>
+            </nav>
+            
+            <div class="right">
+
+            {% if empty == False %}
+
+                {% for i in range(articles|length) %}
+                    <h3> {{titles[i]}} Word Cloud </h3>
+                    <img src="data:image/png;base64,{{articles[i]}}">
+                    <br>
+                {% endfor %}
+
+                <br>
+
+                <h3>Tags</h3>
+
+                <table class="data table" width="800px">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for key, value in tags.items() %}
+                    <tr>
+                        <td> {{ key }} </td>
+                        <td> {{ value }} </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <br>
+
+                <h3>Characters</h3>
+
+                <table class="data table" width="800px">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for key, value in characters.items() %}
+                    <tr>
+                        <td> {{ key }} </td>
+                        <td> {{ value }} </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <br>
+
+                <h3>Relationships</h3>
+
+                <table class="data table" width="800px">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for key, value in relationships.items() %}
+                    <tr>
+                        <td> {{ key }} </td>
+                        <td> {{ value }} </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <br>
+
+                <h3>Fandoms</h3>
+
+                <table class="data table" width="800px">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for key, value in fandoms.items() %}
+                    <tr>
+                        <td> {{ key }} </td>
+                        <td> {{ value }} </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <h3>Categories</h3>
+                    
+                <div id="piechart_categories" style="width: 800px; height: 400px;"></div>
+
+                <h3>Ratings</h3>
+                    
+                <div id="piechart_ratings" style="width: 800px; height: 400px;"></div>
+
+            {% endif %}
+
+            {% if empty == True %}
+                <p>Uh oh! It looks like this user hasn't published any works yet. Better get writing ;)</p>
+            {% endif %}
+            </div>
+        </div>
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('.data').DataTable();
+    });
+  </script>
+{% endblock %}
+</body>
+</html>

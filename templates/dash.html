@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/main.css') }}">
+        <title>ao3.plus &#8212; An extension of your archiveofourown.org profile</title>
+    </head>
+    <body>
+        <div id="page-wrapper"> 
+        <div id="dash-wrapper">    
+            <img src="\static\images\ao3_logo.png" alt="" class="logo" width="70">
+		    <h1 style="float: clear;">ao3.plus</h1>
+		    <h2>ao3.plus is an extension of your archiveofourown.org profile, showing you stats and graphs about your fanfiction experience.</h2>
+            <nav id="nav">
+                <ul>
+                    <li class="nav"><span><a href="/dash"> Dashboard </a></span></li>
+                    <li class="nav"><span><a href="/bookmarks"> Bookmarks </a></span></li>
+                    <li class="nav"><span><a href="/works"> Works </a></span></li>
+                    <li class="nav"><span><a href="/achievements"> Achievements </a></span></li>
+                    <li class="nav"><span><a href="/contact"> Contact </a></span></li>
+                </ul>
+            </nav>
+            
+            <div class="right">
+            <div class="inner">
+            <h3 class="dash">{{ user | safe }}</h3>
+            <div class="left">
+            <ul class="left" style="list-style-type: none;">
+                <li class="prof">Years on Ao3: <span style="color:#970000">{{ years }}</span></li>
+                <li class="prof"><span style="color:#970000"><a href="{{ url }}" target="_blank">Profile</a></span> on Ao3</li>
+                <li class="prof"><span style="color:#970000"><a href="{{ urlw }}" target="_blank">Works</a></span> on Ao3</li>
+                <li class="prof"><span style="color:#970000"><a href="{{ urlb }}" target="_blank">Bookmarks</a></span> on Ao3</li>
+            </ul>
+            <img src="{{ icon }}" alt="" class="pfp" width="200">
+            </div>
+            </div>
+            </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/main.css') }}">
+        <title>ao3.plus &#8212; An extension of your archiveofourown.org profile</title>
+    </head>
+    <body>
+        <div id="page-wrapper">  
+            <img src="\static\images\ao3_logo.png" alt="" class="logo" width="70">
+            <h1 style="float: clear;">ao3.plus</h1>
+            <h2>ao3.plus is an extension of your archiveofourown.org profile, showing you stats and graphs about your fanfiction experience.</h2>
+            <div class="main-wrapper">
+                <h3>About</h3>
+                <p>Ao3.plus is an extension of your Ao3 (Archive of Your Own) profile, created by Ronia Peterson, 
+                    and inspired by <a href="https://anime.plus/" target="_blank">malgraph</a>.</p>
+                <p>Ao3.plus takes a username and scrapes all the relevant information from that profile to create an assortment of word clouds, 
+                    graphs, pie charts, etc. based on the user's bookmarks (saved works) and written works. 
+                    Users can earn badges based on these parameters as well, which are designed to encourage users to read a wider variety of works, 
+                    and write more of their own. Additional graphs and badges are always being designed and updated, and users can submit their 
+                    own ideas for me to implement using the contact form.</p>
+                <p>If you would like to see an example of what a profile on Ao3.plus looks like, feel free to use the example user profile 
+                    <a href="https://archiveofourown.org/users/ao3graph">ao3graph</a>. Although, keep in mind that because this is an example profile, 
+                    there are no published works linked to this account, therefore the "Works" page of ao3.plus will be blank.</p>
+                <p>Ao3.plus primarily uses Python with Flask and SQlite. Feel free to visit the <a href="https://github.com/RealZetaRiemann/ao3.plus" target="_blank">git repo</a> to view the source files.</p>
+            </div>
+        </div>
+    </body>
+</html>

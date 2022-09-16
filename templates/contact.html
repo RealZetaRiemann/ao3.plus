@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/main.css') }}">
+        <title>ao3.plus &#8212; An extension of your archiveofourown.org profile</title>
+    </head>
+    <body>
+        <div id="page-wrapper"> 
+            <img src="\static\images\ao3_logo.png" alt="" class="logo" width="70">
+		    <h1 style="float: clear;">ao3.plus</h1>
+		    <h2>ao3.plus is an extension of your archiveofourown.org profile, showing you stats and graphs about your fanfiction experience.</h2>
+            <nav id="nav">
+                <ul>
+                    <li class="nav"><span><a href="/dash"> Dashboard </a></span></li>
+                    <li class="nav"><span><a href="/bookmarks"> Bookmarks </a></span></li>
+                    <li class="nav"><span><a href="/works"> Works </a></span></li>
+                    <li class="nav"><span><a href="/achievements"> Achievements </a></span></li>
+                    <li class="nav"><span><a href="/contact"> Contact </a></span></li>
+                </ul>
+            </nav>
+            
+            <div class="right">
+ 
+                {% block content %}
+                <h3 class="responsive-center">Contact</h3>
+
+                {% if success %}
+                    <p>Thank you for your message. We'll get back to you shortly.</p>
+ 
+                {% else %}
+
+                    {% for message in get_flashed_messages() %}
+                        <div class="flash">{{ message }}</div>
+                    {% endfor %}
+
+                    <form action="{{ url_for('contact') }}" method=post id="contact">
+                        {{ form.hidden_tag() }}
+                    
+                        {{ form.name.label }}
+                        {{ form.name }}
+                    
+                        {{ form.email.label }}
+                        {{ form.email }}
+                    
+                        {{ form.subject.label }}
+                        {{ form.subject }}
+                    
+                        {{ form.message.label }}
+                        {{ form.message }}
+                    
+                        {{ form.submit }}
+                    </form>
+                {% endif %}
+                {% endblock %}
+
+            </div>
+        </div>
+    </body>
+</html>
