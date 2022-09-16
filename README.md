@@ -1,5 +1,5 @@
 # ao3.plus
-www.ao3graph.com
+<a href="http://www.ao3graph.com/" target="_blank">http://www.ao3graph.com/</a>
 
 Ao3.plus is an extension of your Ao3 (Archive of Your Own) profile, created by Ronia Peterson, and inspired by <a href="https://anime.plus/" target="_blank">malgraph</a>.
 
