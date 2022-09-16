@@ -1,3 +1,5 @@
+# Running this file will create an empty database for ao3.plus
+
 import sqlite3
 
 # Create Database:
