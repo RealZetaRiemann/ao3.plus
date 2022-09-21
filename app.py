@@ -1,37 +1,35 @@
-from flask import Flask, render_template, request, session, jsonify, flash
-import requests
-from requests import get
-from bs4 import BeautifulSoup
+"""Flask app for ao3graph.com"""
 import re
 import secrets
-import sys
-from database import *
-from funcs import *
-from flask_mail import Message, Mail
 from datetime import datetime
+from flask import Flask, render_template, request, session, flash
+import requests
+from bs4 import BeautifulSoup
+from flask_mail import Message, Mail
+from database import list_to_table, dict_to_table, table_to_dict, table_to_list
+from funcs import wordcloud_from_dict, ContactForm
 
 mail = Mail()
 
 app = Flask(__name__)
 
-app.secret_key = secrets.token_bytes(32)                                        # check for tampering
+app.secret_key = secrets.token_bytes(32)   # check for tampering
 
 app.config['MAIL_SERVER'] = '192.168.1.10'
 
-
 mail.init_app(app)
 
-# renders user input screen and home page
 @app.route("/")
 def index():
+    """ Renders user input screen and home page """
     failure = False
     return render_template('index.html', failure = failure)
 
-# renders dashboard for given username
 @app.route('/dash/', methods = ['POST', 'GET]'])
 def dashboard():
+    """ Renders dashboard for given username """
     if request.method == 'GET':
-        return f"The URL /dash is accessed directly. Try going to the home page to enter your username."
+        return "The URL /dash is accessed directly. Try going to the home page to enter your username."
     if request.method == 'POST':
         user = request.form.get("username")                                     # get username
         session["user"] = user                                                  # save username during session across pages
@@ -168,7 +166,7 @@ def dashboard():
 
         while count < len(pages):
             for fic in fanfics:                                                                            # loop through every fic on the page
-                if fic.find('p', text = "This has been deleted, sorry!") == None:                          # make sure fic hasn't been deleted
+                if fic.find('p', text = "This has been deleted, sorry!") is None:                          # make sure fic hasn't been deleted
                     link = fic.div.h4.a['href']                                                            # get work link
                     blinks.append(link)                                                                    # add work link to list
 
@@ -289,8 +287,8 @@ def dashboard():
                     bdatesbm.append(date_bookmarked)                                                       # add date bookmarked to list
 
             count += 1
-            urlb = "https://archiveofourown.org/users/" + user + "/bookmarks" + "?page=" + str(count)      # url of user's next bookmarks page
-            bookmarks = requests.get(urlb)                                                                 # get next bookmarks page contents
+            urlb = "https://archiveofourown.org/users/" + user + "/bookmarks" + "?page=" + str(count)      # url of next bookmarks page
+            bookmarks = requests.get(urlb)                                                                 # next bookmarks page contents
             bsoup = BeautifulSoup(bookmarks.text, "html.parser")                                           # formats bookmarks results
             fanfics = bsoup.find_all('li', role="article")                                                 # stores individual fanfic data
 
@@ -328,7 +326,7 @@ def dashboard():
 
         while count < len(pages):
             for fic in fanfics:                                                                            # loop through every fic on the page
-                if fic.find('p', text = "This has been deleted, sorry!") == None:                          # make sure fic hasn't been deleted
+                if fic.find('p', text = "This has been deleted, sorry!") is None:                          # make sure fic hasn't been deleted
                     link = fic.div.h4.a['href']                                                            # get work link
                     wlinks.append(link)                                                                    # add work link to list
 
@@ -497,7 +495,7 @@ def bookmark_page():
     else:
         empty = False
 
-    if empty == False:
+    if empty is False:
         btagsd = table_to_dict(user, "BTAGS")
         bcharactersd = table_to_dict(user, "BCHARACTERS")
         brelationshipsd = table_to_dict(user, "BRELATIONSHIPS")
@@ -537,15 +535,17 @@ def bookmark_page():
         bfandomsd = {}
         ratingdata = {}
 
-    return render_template('bookmarks.html', user = user, articles = clouds, titles = titles, tags = btagsd, characters = bcharactersd, relationships = brelationshipsd, fandoms = bfandomsd, categorydata=categorydata, ratingdata = ratingdata, empty = empty)
+    return render_template('bookmarks.html', user = user, articles = clouds, titles = titles,
+    tags = btagsd, characters = bcharactersd, relationships = brelationshipsd,
+    fandoms = bfandomsd, categorydata=categorydata, ratingdata = ratingdata, empty = empty)
 
 # renders works information page for given username
 @app.route('/works/')
 def work_page():
 
-    if "access" not in session:                                             # check if a username has been entered
+    if "access" not in session:                       # check if a username has been entered
         failure = True
-        return render_template('index.html',  failure = failure)            # if not return to index
+        return render_template('index.html',  failure = failure)    # if not return to index
 
     user = session["user"]
 
@@ -596,38 +596,38 @@ def work_page():
         wfandomsd = {}
         ratingdata = {}
 
-    return render_template('works.html', user = user, articles = clouds, titles = titles, tags = wtagsd, characters = wcharactersd, relationships = wrelationshipsd, fandoms = wfandomsd, categorydata=categorydata, ratingdata = ratingdata, empty = empty)
+    return render_template('works.html', user = user, articles = clouds, titles = titles,
+    tags = wtagsd, characters = wcharactersd, relationships = wrelationshipsd,
+    fandoms = wfandomsd, categorydata=categorydata, ratingdata = ratingdata, empty = empty)
 
 # renders contact information page
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
 
-    if "access" not in session:                                             # check if a username has been entered
+    if "access" not in session:                      # check if a username has been entered
         failure = True
-        return render_template('index.html',  failure = failure)            # if not return to index
+        return render_template('index.html',  failure = failure)   # if not return to index
 
     form = ContactForm()
   
     if request.method == 'POST':
-        if form.validate() == False:
+        if form.validate() is False:
             flash('All fields are required.')
             return render_template('contact.html', form=form)
         else:
             msg = Message(form.subject.data, sender='ronia@jerpeter.com', recipients=['ronia.peterson@gmail.com'])
-            msg.body = """
-            From: %s &lt;%s&gt;
-            %s
-            """ % (form.name.data, form.email.data, form.message.data)
+            msg.body = "From: {0} &lt;{1}&gt;{2}".format(form.name.data, form.email.data, form.message.data)
             mail.send(msg)
 
             return render_template('contact.html', success=True)
- 
+
     elif request.method == 'GET':
         return render_template('contact.html', form=form)
 
-# renders dashboard after a username has already been entered
 @app.route('/dash/')
 def dashed():
+    """ Renders dashboard after a username has already been entered """
+
     if "access" in session:
         user = session["user"]
         url = session["url"]
@@ -635,21 +635,23 @@ def dashed():
         urlw = session["urlw"]
         icon = session["icon"]
         years_active = session["years"]
-        return render_template('dash.html', user = user, url = url, urlb = urlb, urlw = urlw, icon = icon, years = years_active)
+        return render_template('dash.html', user = user, url = url, urlb = urlb,
+        urlw = urlw, icon = icon, years = years_active)
     else:
-        failure = True
-        return render_template('index.html',  failure = failure)            # if user doesn't exist, return to index
+        failure = True                             # if user doesn't exist, return to index
+        return render_template('index.html',  failure = failure)
 
 @app.route('/achievements/')
 def achievements():
+    """ Renders achievements page """
 
-    if "access" not in session:                                             # check if a username has been entered
+    if "access" not in session:                      # check if a username has been entered
         failure = True
-        return render_template('index.html',  failure = failure)            # if not return to index
+        return render_template('index.html',  failure = failure)   # if not return to index
 
     user = session["user"]
     total_achievements = 0
-        
+
     # bookmarks-based achievements
     btitles = table_to_list(user, "BTITLES")
 
@@ -711,9 +713,9 @@ def achievements():
     explicit = bratingsd["Explicit"] + wratingsd["Explicit"]
     mature = bratingsd["Mature"] + wratingsd["Mature"]
     notrated = bratingsd["Not Rated"] + wratingsd["Not Rated"]
-    all = gen + teen + explicit + mature + notrated
+    all_ratings = gen + teen + explicit + mature + notrated
 
-    if all == 0:
+    if all_ratings == 0:
         ratings_achievement = "None"
     elif explicit + mature == 0:
         ratings_achievement = "Puritan"
@@ -731,14 +733,18 @@ def achievements():
         ratings_achievement = "Pervert"
         total_achievements += 1
 
-    return render_template('achievements.html', user = user, total = total_achievements, ratings = ratings_achievement, bookmarks = bookmarks_achievement, works = works_achievement, completionist = completionist)
+    return render_template('achievements.html', user = user, total = total_achievements,
+    ratings = ratings_achievement, bookmarks = bookmarks_achievement,
+    works = works_achievement, completionist = completionist)
 
 @app.route('/everyachievement/')
 def everyachievement():
+    """ Renders everyachievement page """
     return render_template('everyachievement.html')
 
 @app.route('/about/')
 def about():
+    """ Renders about page"""
     return render_template('about.html')
 
-#app.run(host='localhost', port=5000)
+app.run(host='localhost', port=5000)

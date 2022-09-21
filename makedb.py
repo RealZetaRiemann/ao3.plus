@@ -1,4 +1,5 @@
 #! /usr/bin/python
+""" Creates database for ao3graph.com """
 
 # Running this file will create an empty database for ao3.plus
 
@@ -54,4 +55,4 @@ conn.execute('CREATE TABLE WHITS (username TEXT, col1 TEXT, UNIQUE(username))')
 conn.execute('CREATE TABLE WDATESP (username TEXT, col1 TEXT, UNIQUE(username))')
 
 # close database
-conn.close
+conn.close()
