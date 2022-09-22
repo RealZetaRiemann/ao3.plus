@@ -720,16 +720,16 @@ def achievements():
     elif explicit + mature == 0:
         ratings_achievement = "Puritan"
         total_achievements += 1
-    elif (explicit + mature) / all <= 0.33:
+    elif (explicit + mature) / all_ratings <= 0.33:
         ratings_achievement = "Curious"
         total_achievements += 1
-    elif (explicit + mature) / all <= 0.66:
+    elif (explicit + mature) / all_ratings <= 0.66:
         ratings_achievement = "Well Rounded"
         total_achievements += 1
-    elif (explicit + mature) / all < 1:
+    elif (explicit + mature) / all_ratings < 1:
         ratings_achievement = "Here for 'The Plot'"
         total_achievements += 1
-    elif (explicit + mature) / all == 1:
+    elif (explicit + mature) / all_ratings == 1:
         ratings_achievement = "Pervert"
         total_achievements += 1
 
