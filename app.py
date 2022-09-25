@@ -655,8 +655,7 @@ def achievements():
     # bookmarks-based achievements
     btitles = table_to_list(user, "BTITLES")
 
-    if len(btitles) == 0:
-        bookmarks_achievement = "No Bookmarks Yet"
+    bookmarks_achievement = "No Bookmarks Yet"
     if len(btitles) >= 10:
         bookmarks_achievement = "Newbie"
         total_achievements += 1
@@ -676,8 +675,7 @@ def achievements():
     # works-based achievements
     wtitles = table_to_list(user, "WTITLES")
 
-    if len(wtitles) == 0:
-        works_achievement = "No Works Yet"
+    works_achievement = "No Works Yet"
     if len(wtitles) >= 1:
         works_achievement = "Not Just a Reader"
         total_achievements += 1
@@ -715,21 +713,20 @@ def achievements():
     notrated = bratingsd["Not Rated"] + wratingsd["Not Rated"]
     all_ratings = gen + teen + explicit + mature + notrated
 
-    if all_ratings == 0:
-        ratings_achievement = "None"
-    elif explicit + mature == 0:
+    ratings_achievement = "None"
+    if explicit + mature == 0:
         ratings_achievement = "Puritan"
         total_achievements += 1
-    elif (explicit + mature) / all_ratings <= 0.33:
+    if (explicit + mature) / all_ratings <= 0.33:
         ratings_achievement = "Curious"
         total_achievements += 1
-    elif (explicit + mature) / all_ratings <= 0.66:
+    if (explicit + mature) / all_ratings <= 0.66:
         ratings_achievement = "Well Rounded"
         total_achievements += 1
-    elif (explicit + mature) / all_ratings < 1:
+    if (explicit + mature) / all_ratings < 1:
         ratings_achievement = "Here for 'The Plot'"
         total_achievements += 1
-    elif (explicit + mature) / all_ratings == 1:
+    if (explicit + mature) / all_ratings == 1:
         ratings_achievement = "Pervert"
         total_achievements += 1
 
