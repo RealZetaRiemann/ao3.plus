@@ -6,7 +6,7 @@ from flask import Flask, render_template, request, session, flash
 import requests
 from bs4 import BeautifulSoup
 from flask_mail import Message, Mail
-from database import list_to_table, dict_to_table, table_to_dict, table_to_list
+from database import list_to_table, dict_to_table, table_to_dict, table_to_list, dict_to_TAGtable, TAGtable_to_dict
 from funcs import wordcloud_from_dict, ContactForm
 
 mail = Mail()
@@ -59,8 +59,7 @@ def dashboard():
         session["years"] = years_active
 
         # initialize bookmarks data storage:
-        blinks = []
-        btitles = []
+        bworks = 0           # number of works bookmarked
         bauthorsd = {}
         bgifteesd = {}
         bfandomsd = {}
@@ -108,8 +107,7 @@ def dashboard():
         bdatesbm = []
 
         # initialize works data storage:
-        wlinks = []
-        wtitles = []
+        wworks = 0           # number of works written
         wauthorsd = {}
         wgifteesd = {}
         wfandomsd = {}
@@ -167,11 +165,8 @@ def dashboard():
         while count < len(pages):
             for fic in fanfics:                                                                            # loop through every fic on the page
                 if fic.find('p', text = "This has been deleted, sorry!") is None:                          # make sure fic hasn't been deleted
-                    link = fic.div.h4.a['href']                                                            # get work link
-                    blinks.append(link)                                                                    # add work link to list
 
-                    title = fic.div.h4.a.text                                                              # get fanfic title
-                    btitles.append(title)                                                                  # add fanfic title to list
+                    bworks += 1                                                                            # icrease bookmarked works counter
 
                     authors = fic.div.h4.find_all('a', rel="author") \
                         if fic.div.h4.find('a', rel="author") else 'Anonymous'                             # get author name(s)
@@ -293,18 +288,17 @@ def dashboard():
             fanfics = bsoup.find_all('li', role="article")                                                 # stores individual fanfic data
 
         # update database tables
-        list_to_table(user, blinks, "BLINKS")
-        list_to_table(user, btitles, "BTITLES")
+        session["bworks"] = bworks
+        dict_to_TAGtable(user, bfandomsd, "BFANDOMS")
+        dict_to_TAGtable(user, brelationshipsd, "BRELATIONSHIPS")
+        dict_to_TAGtable(user, bcharactersd, "BCHARACTERS")
+        dict_to_TAGtable(user, btagsd, "BTAGS")
         dict_to_table(user, bauthorsd, "BAUTHORS")
         dict_to_table(user, bgifteesd, "BGIFTEES")
-        dict_to_table(user, bfandomsd, "BFANDOMS")
         dict_to_table(user, bratingsd, "BRATINGS")
         dict_to_table(user, bwarningsd, "BWARNINGS")
         dict_to_table(user, bcategoriesd, "BCATEGORIES")
         dict_to_table(user, bcompletiond, "BCOMPLETION")
-        dict_to_table(user, brelationshipsd, "BRELATIONSHIPS")
-        dict_to_table(user, bcharactersd, "BCHARACTERS")
-        dict_to_table(user, btagsd, "BTAGS")
         dict_to_table(user, blanguagesd, "BLANGUAGES")
         list_to_table(user, bwords, "BWORDS")
         list_to_table(user, bcollections, "BCOLLECTIONS")
@@ -327,11 +321,8 @@ def dashboard():
         while count < len(pages):
             for fic in fanfics:                                                                            # loop through every fic on the page
                 if fic.find('p', text = "This has been deleted, sorry!") is None:                          # make sure fic hasn't been deleted
-                    link = fic.div.h4.a['href']                                                            # get work link
-                    wlinks.append(link)                                                                    # add work link to list
 
-                    title = fic.div.h4.a.text                                                              # get fanfic title
-                    wtitles.append(title)                                                                  # add fanfic title to list
+                    wworks += 1
 
                     authors = fic.div.h4.find_all('a', rel="author") \
                         if fic.div.h4.find('a', rel="author") else 'Anonymous'                             # get author name(s)
@@ -450,18 +441,17 @@ def dashboard():
             fanfics = wsoup.find_all('li', role="article")                                                 # stores individual fanfic data
 
         # update database tables
-        list_to_table(user, wlinks, "WLINKS")
-        list_to_table(user, wtitles, "WTITLES")
+        session["wworks"] = wworks
+        dict_to_TAGtable(user, wfandomsd, "WFANDOMS")
+        dict_to_TAGtable(user, wrelationshipsd, "WRELATIONSHIPS")
+        dict_to_TAGtable(user, wcharactersd, "WCHARACTERS")
+        dict_to_TAGtable(user, wtagsd, "WTAGS")
         dict_to_table(user, wauthorsd, "WAUTHORS")
         dict_to_table(user, wgifteesd, "WGIFTEES")
-        dict_to_table(user, wfandomsd, "WFANDOMS")
         dict_to_table(user, wratingsd, "WRATINGS")
         dict_to_table(user, wwarningsd, "WWARNINGS")
         dict_to_table(user, wcategoriesd, "WCATEGORIES")
         dict_to_table(user, wcompletiond, "WCOMPLETION")
-        dict_to_table(user, wrelationshipsd, "WRELATIONSHIPS")
-        dict_to_table(user, wcharactersd, "WCHARACTERS")
-        dict_to_table(user, wtagsd, "WTAGS")
         dict_to_table(user, wlanguagesd, "WLANGUAGES")
         list_to_table(user, wwords, "WWORDS")
         list_to_table(user, wcollections, "WCOLLECTIONS")
@@ -487,20 +477,19 @@ def bookmark_page():
         return render_template('index.html',  failure = failure)            # if not return to index
 
     user = session["user"]
+    bworks = session["bworks"]
 
-    btitles = table_to_list(user, "BTITLES")
-
-    if len(btitles) == 0:
+    if bworks == 0:
         empty = True
     else:
         empty = False
 
     if empty is False:
-        btagsd = table_to_dict(user, "BTAGS")
-        bcharactersd = table_to_dict(user, "BCHARACTERS")
-        brelationshipsd = table_to_dict(user, "BRELATIONSHIPS")
+        btagsd = TAGtable_to_dict(user, "BTAGS")
+        bcharactersd = TAGtable_to_dict(user, "BCHARACTERS")
+        brelationshipsd = TAGtable_to_dict(user, "BRELATIONSHIPS")
         bcategoriesd = table_to_dict(user, "BCATEGORIES")
-        bfandomsd = table_to_dict(user, "BFANDOMS")
+        bfandomsd = TAGtable_to_dict(user, "BFANDOMS")
         bratingsd = table_to_dict(user, "BRATINGS")
 
         # generates word clouds:
@@ -548,20 +537,19 @@ def work_page():
         return render_template('index.html',  failure = failure)    # if not return to index
 
     user = session["user"]
+    wworks = session["wworks"]
 
-    wtitles = table_to_list(user, "WTITLES")
-
-    if len(wtitles) == 0:
+    if wworks == 0:
         empty = True
     else:
         empty = False
 
     if empty == False:
-        wtagsd = table_to_dict(user, "WTAGS")
-        wcharactersd = table_to_dict(user, "WCHARACTERS")
-        wrelationshipsd = table_to_dict(user, "WRELATIONSHIPS")
+        wtagsd = TAGtable_to_dict(user, "WTAGS")
+        wcharactersd = TAGtable_to_dict(user, "WCHARACTERS")
+        wrelationshipsd = TAGtable_to_dict(user, "WRELATIONSHIPS")
         wcategoriesd = table_to_dict(user, "WCATEGORIES")
-        wfandomsd = table_to_dict(user, "WFANDOMS")
+        wfandomsd = TAGtable_to_dict(user, "WFANDOMS")
         wratingsd = table_to_dict(user, "WRATINGS")
 
         # generates word clouds:
@@ -650,48 +638,48 @@ def achievements():
         return render_template('index.html',  failure = failure)   # if not return to index
 
     user = session["user"]
+    bworks = session["bworks"]
+    wworks = session["wworks"]
     total_achievements = 0
 
     # bookmarks-based achievements
-    btitles = table_to_list(user, "BTITLES")
 
     bookmarks_achievement = "No Bookmarks Yet"
-    if len(btitles) >= 10:
+    if bworks >= 10:
         bookmarks_achievement = "Newbie"
         total_achievements += 1
-    if len(btitles) >= 100:
+    if bworks >= 100:
         bookmarks_achievement = "Casual"
-    if len(btitles) >= 250:
+    if bworks >= 250:
         bookmarks_achievement = "Curator"
-    if len(btitles) >= 500:
+    if bworks >= 500:
         bookmarks_achievement = "Bookworm"
-    if len(btitles) >= 1000:
+    if bworks >= 1000:
         bookmarks_achievement = "Collector"
-    if len(btitles) >= 5000:
+    if bworks >= 5000:
         bookmarks_achievement = "Rereader Extraordinaire"
-    if len(btitles) >= 10000:
+    if bworks >= 10000:
         bookmarks_achievement = "Expert"
 
     # works-based achievements
-    wtitles = table_to_list(user, "WTITLES")
 
     works_achievement = "No Works Yet"
-    if len(wtitles) >= 1:
+    if wworks >= 1:
         works_achievement = "Not Just a Reader"
         total_achievements += 1
-    if len(wtitles) >= 5:
+    if wworks >= 5:
         works_achievement = "Practice Makes Perfect"
-    if len(wtitles) >= 20:
+    if wworks >= 20:
         works_achievement = "Hobbyist"
-    if len(wtitles) >= 50:
+    if wworks >= 50:
         works_achievement = "No Beta, We Die Like Men"
-    if len(wtitles) >= 100:
+    if wworks >= 100:
         works_achievement = "Author"
-    if len(wtitles) >= 250:
+    if wworks >= 250:
         works_achievement = "Ao3 Celebrity"
-    if len(wtitles) >= 500:
+    if wworks >= 500:
         works_achievement = "Basically a Second Job"
-    if len(wtitles) >= 1000:
+    if wworks >= 1000:
         works_achievement = "Legendary"
 
     # completionist achievement
@@ -699,7 +687,7 @@ def achievements():
 
     completionist = False
     if wcompletiond["Work in Progress"] + wcompletiond["Series in Progress"] == 0:
-        if len(wtitles) >= 1:
+        if wworks >= 1:
             completionist = True
             total_achievements += 1
 
@@ -744,4 +732,4 @@ def about():
     """ Renders about page"""
     return render_template('about.html')
 
-# app.run(host='localhost', port=5000)
+app.run(host='localhost', port=5000)

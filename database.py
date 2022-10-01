@@ -3,7 +3,7 @@ import sqlite3
 
 def list_to_table(user, data, table):
     """ Updates table information, accepts a username, list of data, and table name as arguments """
-    conn = sqlite3.connect("/home/ronia/ao3graph/db/database.db")
+    conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
 
     cursor.execute("INSERT OR IGNORE INTO {} (username) VALUES (:name)".format(table), {'name': user})
@@ -30,7 +30,7 @@ def list_to_table(user, data, table):
 
 def dict_to_table(user, data, table):
     """ Updates table information, accepts a username, dictionary, and table name as arguments """
-    conn = sqlite3.connect("/home/ronia/ao3graph/db/database.db")
+    conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
 
     user1 = user + " KEYS"
@@ -81,7 +81,7 @@ def table_to_dict(user, table):
 
     newdict = {}
 
-    conn = sqlite3.connect("/home/ronia/ao3graph/db/database.db")
+    conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
 
     userk = user + " KEYS"
@@ -107,7 +107,7 @@ def table_to_list(user, table):
 
     newlist = []
 
-    conn = sqlite3.connect("/home/ronia/ao3graph/db/database.db")
+    conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
 
     items = cursor.execute("SELECT * FROM {} WHERE username = (:name)".format(table), {'name': user})
@@ -122,3 +122,55 @@ def table_to_list(user, table):
             count += 1
 
     return newlist
+
+def dict_to_TAGtable(user, data, table):
+    """ Updates table information, accepts a username, dictionary, and table name as arguments """
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+
+    keystring = ""
+    keys = data.keys()
+
+    cursor.execute("INSERT OR IGNORE INTO {} (username) VALUES (:name)".format(table), {'name': user})
+    
+    for key in keys:
+        keystring = keystring + str(key) + ","
+
+    cursor.execute("UPDATE {0} SET keys = :new_value WHERE username=:name".format(table), {'new_value': keystring, 'name': user})
+
+    valuestring = ""
+    values = data.values()
+    
+    for val in values:
+        valuestring = valuestring + str(val) + ","
+
+    cursor.execute("UPDATE {0} SET vals = :new_value WHERE username=:name".format(table), {'new_value': valuestring, 'name': user})
+
+    conn.commit()
+    conn.close()
+
+def TAGtable_to_dict(user, table):
+    """ Returns dictionary of data from table and takes a username and table name as parameters """
+
+    newdict = {}
+
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+
+    keys = cursor.execute("SELECT keys FROM {} WHERE username = (:name)".format(table), {'name': user})
+    keys = cursor.fetchone()
+    vals = cursor.execute("SELECT vals FROM {} WHERE username = (:name)".format(table), {'name': user})
+    vals = cursor.fetchone()
+    count = 0
+
+    keys = keys[0].split(",")
+    vals = vals[0].split(",")
+
+    for key in keys:
+        if key is not "":
+            newdict[key] = int(vals[count])
+            count += 1
+
+    return newdict
+
+# /home/ronia/ao3graph/db/database.db replace when done
