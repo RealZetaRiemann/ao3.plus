@@ -732,4 +732,4 @@ def about():
     """ Renders about page"""
     return render_template('about.html')
 
-app.run(host='localhost', port=5000)
+#app.run(host='localhost', port=5000)
