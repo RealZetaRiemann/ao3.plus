@@ -59,9 +59,8 @@ def dashboard():
         session["years"] = years_active
 
         # initialize bookmarks data storage:
-        bworks = 0           # number of works bookmarked
+        bworks = 0
         bauthorsd = {}
-        bgifteesd = {}
         bfandomsd = {}
         bratingsd = {
             "General Audiences": 0,
@@ -108,7 +107,6 @@ def dashboard():
 
         # initialize works data storage:
         wworks = 0           # number of works written
-        wauthorsd = {}
         wgifteesd = {}
         wfandomsd = {}
         wratingsd = {
@@ -177,16 +175,6 @@ def dashboard():
                                 bauthorsd[author] += 1                                                     # increase that author's count
                             else:
                                 bauthorsd[author] = 1                                                      # or add author to dictionary
-
-                    giftee = fic.div.h4.find_all('a', href=re.compile("/gifts")) \
-                        if fic.div.h4.find('a', href=re.compile("/gifts")) else 'None'                     # get giftee name
-                    if giftee != 'None':
-                        for g in giftee:
-                            gift = g.text
-                            if gift in bgifteesd:
-                                bgifteesd[gift] += 1                                                       # increase that giftees's count
-                            else:
-                                bgifteesd[gift] = 1                                                        # or add giftee to dictionary
 
                     fandoms = fic.div.h5.find_all('a')                                                     # get list of fandoms
                     for f in fandoms:
@@ -293,13 +281,15 @@ def dashboard():
         dict_to_TAGtable(user, brelationshipsd, "BRELATIONSHIPS")
         dict_to_TAGtable(user, bcharactersd, "BCHARACTERS")
         dict_to_TAGtable(user, btagsd, "BTAGS")
+
         dict_to_table(user, bauthorsd, "BAUTHORS")
-        dict_to_table(user, bgifteesd, "BGIFTEES")
+
         dict_to_table(user, bratingsd, "BRATINGS")
         dict_to_table(user, bwarningsd, "BWARNINGS")
         dict_to_table(user, bcategoriesd, "BCATEGORIES")
         dict_to_table(user, bcompletiond, "BCOMPLETION")
         dict_to_table(user, blanguagesd, "BLANGUAGES")
+
         list_to_table(user, bwords, "BWORDS")
         list_to_table(user, bcollections, "BCOLLECTIONS")
         list_to_table(user, bcomments, "BCOMMENTS")
@@ -323,16 +313,6 @@ def dashboard():
                 if fic.find('p', text = "This has been deleted, sorry!") is None:                          # make sure fic hasn't been deleted
 
                     wworks += 1
-
-                    authors = fic.div.h4.find_all('a', rel="author") \
-                        if fic.div.h4.find('a', rel="author") else 'Anonymous'                             # get author name(s)
-                    if authors != 'Anonymous':
-                        for a in authors:
-                            author = a.text
-                            if author in wauthorsd:
-                                wauthorsd[author] += 1                                                     # increase that author's count
-                            else:
-                                wauthorsd[author] = 1                                                      # or add author to dictionary
 
                     giftee = fic.div.h4.find_all('a', href=re.compile("/gifts")) \
                         if fic.div.h4.find('a', href=re.compile("/gifts")) else 'None'                     # get giftee name
@@ -446,13 +426,15 @@ def dashboard():
         dict_to_TAGtable(user, wrelationshipsd, "WRELATIONSHIPS")
         dict_to_TAGtable(user, wcharactersd, "WCHARACTERS")
         dict_to_TAGtable(user, wtagsd, "WTAGS")
-        dict_to_table(user, wauthorsd, "WAUTHORS")
+
         dict_to_table(user, wgifteesd, "WGIFTEES")
+
         dict_to_table(user, wratingsd, "WRATINGS")
         dict_to_table(user, wwarningsd, "WWARNINGS")
         dict_to_table(user, wcategoriesd, "WCATEGORIES")
         dict_to_table(user, wcompletiond, "WCOMPLETION")
         dict_to_table(user, wlanguagesd, "WLANGUAGES")
+
         list_to_table(user, wwords, "WWORDS")
         list_to_table(user, wcollections, "WCOLLECTIONS")
         list_to_table(user, wcomments, "WCOMMENTS")

@@ -12,7 +12,6 @@ conn = sqlite3.connect('database.db')
 
 # create tables
 conn.execute('CREATE TABLE BAUTHORS (username TEXT, col1 TEXT, UNIQUE(username))')
-conn.execute('CREATE TABLE BGIFTEES (username TEXT, col1 TEXT, UNIQUE(username))')
 conn.execute('CREATE TABLE BFANDOMS (username TEXT, keys TEXT, vals TEXT, UNIQUE(username))')
 conn.execute('CREATE TABLE BRATINGS (username TEXT, col1 TEXT, UNIQUE(username))')
 conn.execute('CREATE TABLE BWARNINGS (username TEXT, col1 TEXT, UNIQUE(username))')
@@ -31,7 +30,6 @@ conn.execute('CREATE TABLE BHITS (username TEXT, col1 TEXT, UNIQUE(username))')
 conn.execute('CREATE TABLE BDATESP (username TEXT, col1 TEXT, UNIQUE(username))')
 conn.execute('CREATE TABLE BDATESBM (username TEXT, col1 TEXT, UNIQUE(username))')
 
-conn.execute('CREATE TABLE WAUTHORS (username TEXT, col1 TEXT, UNIQUE(username))')
 conn.execute('CREATE TABLE WGIFTEES (username TEXT, col1 TEXT, UNIQUE(username))')
 conn.execute('CREATE TABLE WFANDOMS (username TEXT, keys TEXT, vals TEXT, UNIQUE(username))')
 conn.execute('CREATE TABLE WRATINGS (username TEXT, col1 TEXT, UNIQUE(username))')
