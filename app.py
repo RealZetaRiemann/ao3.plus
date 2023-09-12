@@ -102,8 +102,6 @@ def dashboard():
         bkudos = []
         bbookmarks = []
         bhits = []
-        bdatesp = []
-        bdatesbm = []
 
         # initialize works data storage:
         wworks = 0           # number of works written
@@ -263,12 +261,6 @@ def dashboard():
                         if fic.find('dd', class_="hits") else 0                                            # get kudos count
                     bhits.append(hits)                                                                     # add kudos count to list
 
-                    date_posted = fic.div.find('p', class_=("datetime")).text                              # get date posted
-                    bdatesp.append(date_posted)                                                            # add date posted to list
-
-                    date_bookmarked = fic.select('div')[2].find('p', class_="datetime").text               # get date bookmarked
-                    bdatesbm.append(date_bookmarked)                                                       # add date bookmarked to list
-
             count += 1
             urlb = "https://archiveofourown.org/users/" + user + "/bookmarks" + "?page=" + str(count)      # url of next bookmarks page
             bookmarks = requests.get(urlb)                                                                 # next bookmarks page contents
@@ -296,8 +288,6 @@ def dashboard():
         list_to_table(user, bkudos, "BKUDOS")
         list_to_table(user, bbookmarks, "BBOOKMARKS")
         list_to_table(user, bhits, "BHITS")
-        list_to_table(user, bdatesp, "BDATESP")
-        list_to_table(user, bdatesbm, "BDATESBM")
 
         works = requests.get(urlw)                                                     # get works url contents
         wsoup = BeautifulSoup(works.text, "html.parser")                               # formats works results
@@ -622,6 +612,12 @@ def achievements():
     user = session["user"]
     bworks = session["bworks"]
     wworks = session["wworks"]
+
+    if bworks == 0 and wworks == 0:
+        return render_template('achievements.html', user = user, total = 0,
+        ratings = "None", bookmarks = "No Bookmarks Yet",
+        works = "No Works Yet", completionist = False)
+
     total_achievements = 0
 
     # bookmarks-based achievements
