@@ -75,7 +75,7 @@ def dashboard():
             "Major Character Death": 0,
             "Graphic Depictions Of Violence": 0,
             "Rape/Non-Con": 0,
-            "Underage": 0
+            "Underage Sex": 0
         }
         bcategoriesd = {
             "F/M": 0,
@@ -120,7 +120,7 @@ def dashboard():
             "Major Character Death": 0,
             "Graphic Depictions Of Violence": 0,
             "Rape/Non-Con": 0,
-            "Underage": 0
+            "Underage Sex": 0
         }
         wcategoriesd = {
             "F/M": 0,
@@ -153,12 +153,17 @@ def dashboard():
         bsoup = BeautifulSoup(bookmarks.text, "html.parser")                           # formats bookmarks results
 
         fanfics = bsoup.find_all('li', role="article")                                 # stores individual fanfic data
-        pages = bsoup.find('ol', class_="pagination actions").find_all('li') \
-            if bsoup.find('ol', class_="pagination actions") else [0,0]                # stores page navigation data
+        pages = bsoup.find('ol', class_="pagination actions pagy").find_all('li') \
+            if bsoup.find('ol', class_="pagination actions pagy") else 1               # stores page navigation data
+        
+        if pages != 1:
+            numpages = int(pages[-2].text) # the second to last li in pagination actions has the total number of pages
+        else:
+            numpages = 1
 
         count = 1
 
-        while count < len(pages):
+        while count <= numpages:
             for fic in fanfics:                                                                            # loop through every fic on the page
                 if fic.find('p', text = "This has been deleted, sorry!") is None:                          # make sure fic hasn't been deleted
 
@@ -293,12 +298,17 @@ def dashboard():
         wsoup = BeautifulSoup(works.text, "html.parser")                               # formats works results
 
         fanfics = wsoup.find_all('li', role="article")                                 # stores individual fanfic data
-        pages = wsoup.find('ol', class_="pagination actions").find_all('li') \
-            if wsoup.find('ol', class_="pagination actions") else [0,0]                # stores page navigation data
+        pages = wsoup.find('ol', class_="pagination actions pagy").find_all('li') \
+            if wsoup.find('ol', class_="pagination actions pagy") else 1.              # stores page navigation data
+
+        if pages != 1:
+            numpages = int(pages[-2].text) # the second to last li in pagination actions has the total number of pages
+        else:
+            numpages = 1
 
         count = 1
 
-        while count < len(pages):
+        while count <= numpages:
             for fic in fanfics:                                                                            # loop through every fic on the page
                 if fic.find('p', text = "This has been deleted, sorry!") is None:                          # make sure fic hasn't been deleted
 
