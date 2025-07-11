@@ -3,7 +3,7 @@ import sqlite3
 
 def list_to_table(user, data, table):
     """ Updates table information, accepts a username, list of data, and table name as arguments """
-    conn = sqlite3.connect("/home/ronia/ao3graph/db/database.db")
+    conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
 
     cursor.execute("INSERT OR IGNORE INTO {} (username) VALUES (:name)".format(table), {'name': user})
@@ -30,7 +30,7 @@ def list_to_table(user, data, table):
 
 def dict_to_table(user, data, table):
     """ Updates table information, accepts a username, dictionary, and table name as arguments """
-    conn = sqlite3.connect("/home/ronia/ao3graph/db/database.db")
+    conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
 
     user1 = user + " KEYS"
@@ -81,7 +81,7 @@ def table_to_dict(user, table):
 
     newdict = {}
 
-    conn = sqlite3.connect("/home/ronia/ao3graph/db/database.db")
+    conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
 
     userk = user + " KEYS"
@@ -107,7 +107,7 @@ def table_to_list(user, table):
 
     newlist = []
 
-    conn = sqlite3.connect("/home/ronia/ao3graph/db/database.db")
+    conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
 
     items = cursor.execute("SELECT * FROM {} WHERE username = (:name)".format(table), {'name': user})
@@ -125,7 +125,7 @@ def table_to_list(user, table):
 
 def dict_to_TAGtable(user, data, table):
     """ Updates table information, accepts a username, dictionary, and table name as arguments """
-    conn = sqlite3.connect("/home/ronia/ao3graph/db/database.db")
+    conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
 
     keystring = ""
@@ -154,7 +154,7 @@ def TAGtable_to_dict(user, table):
 
     newdict = {}
 
-    conn = sqlite3.connect("/home/ronia/ao3graph/db/database.db")
+    conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
 
     keys = cursor.execute("SELECT keys FROM {} WHERE username = (:name)".format(table), {'name': user})
@@ -167,7 +167,7 @@ def TAGtable_to_dict(user, table):
     vals = vals[0].split(",")
 
     for key in keys:
-        if key is not "":
+        if key != "":
             newdict[key] = int(vals[count])
             count += 1
 
