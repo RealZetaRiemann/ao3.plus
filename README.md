@@ -1,5 +1,5 @@
 # ao3.plus
-Update: The site is currently down while new options for hosting are being researched.
+Update: The site is currently down while new options for hosting are being decided upon.
 
 <a href="http://www.ao3graph.com/" target="_blank">http://www.ao3graph.com/</a>
 
