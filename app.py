@@ -71,7 +71,7 @@ def dashboard():
         }
         bwarningsd = {
             "No Archive Warnings Apply": 0,
-            "Choose Not To Use Archive Warnings": 0,
+            "Creator Chose Not To Use Archive Warnings": 0,
             "Major Character Death": 0,
             "Graphic Depictions Of Violence": 0,
             "Rape/Non-Con": 0,
@@ -116,7 +116,7 @@ def dashboard():
         }
         wwarningsd = {
             "No Archive Warnings Apply": 0,
-            "Choose Not To Use Archive Warnings": 0,
+            "Creator Chose Not To Use Archive Warnings": 0,
             "Major Character Death": 0,
             "Graphic Depictions Of Violence": 0,
             "Rape/Non-Con": 0,
