@@ -42,6 +42,16 @@ def dashboard():
 
         profile = requests.get(url)                                             # get profile url contents
         soup = BeautifulSoup(profile.text, "html.parser")                       # formats profile results
+        
+        # tests
+        print("Status:", profile.status_code)
+        print("Final URL:", profile.url)
+        print("First 500 chars:")
+        print(profile.text[:500])
+
+        icons = soup.find_all("img", class_="icon")
+        print("Icons found:", len(icons))
+        # end tests
 
         user_check = soup.find('div', class_="flash error")
         if user_check:
